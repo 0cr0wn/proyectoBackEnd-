@@ -1,6 +1,8 @@
-const { Router } = require('express');
+const { Router, query } = require('express');
 const { ProductsController } = require('../controller/productos')
 const router = Router();
+
+
 
 router.get('/', (req, res) => {
     res.json({
@@ -8,39 +10,44 @@ router.get('/', (req, res) => {
     })
 })
 
-router.get('/:id', (req, res) => {
-    try {
-        const id = req.params.id;
+router.get('/:id', async (req, res) => {
 
-        const product = ProductsController.getById(id)
+    const id = req.params.id;
+
+    const product = await ProductsController.getById(id)
+    res.json({
+        msg: product
+    })
+
+})
+
+router.post('/', async (req, res, next) => {
+    const { body } = req
+    try {
+        const data = await ProductsController.save(body)
         res.json({
-            msg: product
+            msg: data
         })
     } catch (err) {
-        const status = err.status || 500
-        const message = err.message || 500
+        next(err)
 
-        res.status(status).json({
-            message
-        })
     }
-})
+});
 
-router.post('/', (req, res) => {
+router.put('/:id', async (req, res) => {
+    const id = req.params.id
+    const { body } = req
+    const data = await ProductsController.findByIdAndUpdate(id, body)
     res.json({
-        msg: ProductsController.save()
+        msg: data
     })
 })
 
-router.put('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
+    const id = req.params.id
+    const data = await ProductsController.findByIdAndDelete(id)
     res.json({
-        msg: ProductsController.findByIdAndUpdate()
-    })
-})
-
-router.delete('/:id', (req, res) => {
-    res.json({
-        msg: ProductsController.findByIdAndDelete()
+        msg: data
     })
 })
 
