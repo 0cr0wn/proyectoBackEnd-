@@ -10,14 +10,18 @@ router.get('/', (req, res) => {
     })
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res, next) => {
+    try {
+        const id = req.params.id;
 
-    const id = req.params.id;
-
-    const product = await ProductsController.getById(id)
-    res.json({
-        msg: product
-    })
+        const product = await ProductsController.getById(id)
+        res.json({
+            msg: product
+        })
+    }
+    catch (err) {
+        next(err)
+    }
 
 })
 
