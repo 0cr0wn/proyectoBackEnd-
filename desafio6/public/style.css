@@ -1,0 +1,24 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.tituloCentrado {
+    text-align: center;
+}
+
+.Centrado {
+    display: flex;
+    justify-content: center;
+}
+
+.imagenAdaptada {
+    height: 50px;
+    width: 50px;
+}
+
+.textWhite {
+    color: white;
+    text-decoration: none;
+}
