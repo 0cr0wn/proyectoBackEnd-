@@ -1,8 +1,11 @@
 const express = require("express");
-const mainRouter = require("../routes/index");
+const http = require("http");
+const mainRouter = require("../routes/main");
 const path = require("path");
+const { productObj, productArray } = require("../controller/product");
 
 const app = express();
+const server = http.Server(app);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -14,9 +17,11 @@ app.set("views", viewsFolderPath);
 app.set("view engine", "pug");
 
 app.get("/", (req, res) => {
-    res.render("ingresoProducto");
+    let quantity = productArray.length;
+    let hasProducts = quantity == 0 ? false : true;
+    res.render("AddProduct", { productArray, hasProducts });
 });
 
 app.use("/api", mainRouter);
 
-module.exports = app;
+module.exports = server;

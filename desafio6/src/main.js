@@ -1,9 +1,14 @@
-const Server = require("./services/server");
+const server = require("./services/server");
+const { initWsServer, getWsServer } = require("./services/socket");
 
-const puerto = 8080;
+const port = 8080;
 
-Server.listen(puerto, () => console.log("Server up en puerto", puerto));
+const init = async () => {
+    initWsServer(server);
+    server.listen(port, () => console.log(`Server up port ${port}`));
+    server.on("error", (error) => {
+        console.log("Server catch!", error);
+    });
+};
 
-Server.on("error", (error) => {
-    console.log("Catch de error en servidor!", error);
-});
+init();
