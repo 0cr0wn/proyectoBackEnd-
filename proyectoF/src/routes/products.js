@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import Product from "../classes/product.js";
+import Product from "../controller/product.js";
 import { body, validationResult } from "express-validator";
 
 const fileName = "products.json";

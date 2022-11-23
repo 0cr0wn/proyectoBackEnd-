@@ -1,4 +1,5 @@
-const server = require("./services/server");
+
+import server from "./services/server.js"
 
 
 const port = 8080;
