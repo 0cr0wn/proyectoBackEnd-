@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import { createProductController } from "../controllers/controllers.products.js";
+import { createProductController } from "../controller/controller.products.js";
 import { body } from "express-validator";
 
 router.post(
