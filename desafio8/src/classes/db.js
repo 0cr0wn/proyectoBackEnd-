@@ -1,6 +1,8 @@
+import dotenv from 'dotenv'
+dotenv.config()
 import knex from "knex";
 import { dbConfig } from "../options/knexfile.js";
-import { Product } from "./product.js";
+
 
 class DB {
     constructor() {
