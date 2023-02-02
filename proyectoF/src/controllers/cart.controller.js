@@ -1,5 +1,5 @@
-import { CartsModel } from "../models/cart.js";
-import { ProductsModel } from "../models/products.js";
+import { CartModel } from "../models/cart.model.js";
+import { ProductModel } from "../models/product.model.js";
 import { validationResult } from "express-validator";
 import { formatTimeStamp } from "../utils/format.js";
 import { findLastCartId } from "../utils/utils.js";
@@ -13,7 +13,7 @@ export const getProductsInCart = async (req, res) => {
     }
     const id = parseInt(req.params.id);
 
-    const cart = await CartsModel.findOne({ id: id });
+    const cart = await CartModel.findOne({ id: id });
 
     if (!cart) {
       return res.status(404).json({
@@ -40,7 +40,7 @@ export const createCart = async (req, res) => {
     let timestamp = formatTimeStamp();
     let products = [];
 
-    await CartsModel.create({
+    await CartModel.create({
       id,
       timestamp,
       products,
@@ -73,7 +73,7 @@ export const addProductsToCart = async (req, res) => {
     const cartId = parseInt(req.params.id);
     const productId = parseInt(req.body.id);
 
-    let cart = await CartsModel.findOne({ id: cartId });
+    let cart = await CartModel.findOne({ id: cartId });
 
     if (!cart) {
       return res.status(404).json({
@@ -81,7 +81,7 @@ export const addProductsToCart = async (req, res) => {
       });
     }
 
-    let product = await ProductsModel.findOne({ id: productId });
+    let product = await ProductModel.findOne({ id: productId });
 
     let products = cart.products;
     products.push(product);
@@ -91,7 +91,7 @@ export const addProductsToCart = async (req, res) => {
         mensaje: "Producto no encontrado!",
       });
     } else {
-      const productAddedToCart = await CartsModel.findByIdAndUpdate(
+      const productAddedToCart = await CartModel.findByIdAndUpdate(
         cart._id,
         { products },
         { new: true }
@@ -117,14 +117,14 @@ export const deleteCartById = async (req, res) => {
       });
     }
     const id = parseInt(req.params.id);
-    let cart = await CartsModel.findOne({ id: id });
+    let cart = await CartModel.findOne({ id: id });
 
     if (!cart) {
       return res.status(404).json({
         mensaje: "carrito no encontrado!",
       });
     } else {
-      await CartsModel.findByIdAndDelete(cart._id);
+      await CartModel.findByIdAndDelete(cart._id);
       return res.status(200).json({
         mensaje: "carrito eliminado con exito",
       });
@@ -147,7 +147,7 @@ export const deleteProductInCartById = async (req, res) => {
     const cartId = parseInt(req.params.id);
     const productId = parseInt(req.params.id_prod);
 
-    let cart = await CartsModel.findOne({ id: cartId });
+    let cart = await CartModel.findOne({ id: cartId });
 
     if (!cart) {
       return res.status(404).json({
@@ -166,7 +166,7 @@ export const deleteProductInCartById = async (req, res) => {
       const filteredProducts = products.filter((item) => item.id !== productId);
       products = filteredProducts;
 
-      const productAddedToCart = await CartsModel.findByIdAndUpdate(cart._id, {
+      const productAddedToCart = await CartModel.findByIdAndUpdate(cart._id, {
         products,
       });
 

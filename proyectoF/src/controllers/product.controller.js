@@ -1,11 +1,16 @@
-import { ProductsModel } from "../models/products.js";
+import { ProductModel } from "../models/product.model.js";
 import { validationResult } from "express-validator";
 import { formatTimeStamp } from "../utils/format.js";
 import { findLastProductId } from "../utils/utils.js";
+import passport from "passport";
+
+const passportOptions = {
+  badRequestMessage: "Problema con username / password!",
+};
 
 export const getAllProducts = async (req, res) => {
   try {
-    let products = await ProductsModel.find();
+    let products = await ProductModel.find();
     res.status(200).json({
       data: products,
     });
@@ -25,7 +30,7 @@ export const getProductById = async (req, res) => {
       });
     }
     const id = parseInt(req.params.id);
-    let product = await ProductsModel.findOne({ id: id });
+    let product = await ProductModel.findOne({ id: id });
     if (!product) {
       return res.status(404).json({
         mensaje: "Producto no encontrado!",
@@ -57,7 +62,7 @@ export const createProduct = async (req, res) => {
     let id = newId;
     let timestamp = formatTimeStamp();
 
-    const newProduct = await ProductsModel.create({
+    const newProduct = await ProductModel.create({
       id,
       timestamp,
       title,
@@ -94,14 +99,14 @@ export const updateProductById = async (req, res) => {
     const id = parseInt(req.params.id);
     const { title, description, code, photo, value, stock } = req.body;
 
-    let product = await ProductsModel.findOne({ id: id });
+    let product = await ProductModel.findOne({ id: id });
 
     if (!product) {
       return res.status(404).json({
         mensaje: "Producto no encontrado!",
       });
     } else {
-      const productUpdated = await ProductsModel.findByIdAndUpdate(
+      const productUpdated = await ProductModel.findByIdAndUpdate(
         product._id,
         { title, description, code, photo, value, stock },
         { new: true }
@@ -119,7 +124,7 @@ export const updateProductById = async (req, res) => {
   }
 };
 
-export const deleteProductById = async (req, res) => {
+export const deleteProductById = async (req, res, next) => {
   try {
     if (isNaN(req.params.id)) {
       return res.status(400).json({
@@ -128,14 +133,14 @@ export const deleteProductById = async (req, res) => {
     }
     const id = parseInt(req.params.id);
 
-    let product = await ProductsModel.findOne({ id: id });
+    let product = await ProductModel.findOne({ id: id });
 
     if (!product) {
       return res.status(404).json({
         mensaje: "Producto no encontrado!",
       });
     } else {
-      await ProductsModel.findByIdAndDelete(product._id);
+      await ProductModel.findByIdAndDelete(product._id);
       return res.status(200).json({
         mensaje: "producto eliminado con exito",
       });

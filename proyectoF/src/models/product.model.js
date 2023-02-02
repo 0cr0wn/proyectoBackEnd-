@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 export const productsCollectionName = "productos";
 
-export const productsSchema = new mongoose.Schema({
+export const productSchema = new mongoose.Schema({
   id: { type: Number, required: true },
   timestamp: { type: String, required: true },
   title: { type: String, required: true },
@@ -13,7 +13,7 @@ export const productsSchema = new mongoose.Schema({
   stock: { type: Number, required: true },
 });
 
-export const ProductsModel = mongoose.model(
+export const ProductModel = mongoose.model(
   productsCollectionName,
-  productsSchema
+  productSchema
 );

@@ -6,15 +6,17 @@ import {
   createProduct,
   updateProductById,
   deleteProductById,
-} from "../controllers/products.js";
+} from "../controllers/product.controller.js";
 import { body } from "express-validator";
+import { isLoggedIn } from "../middlewares/user.middleware.js";
 
-router.get("/", getAllProducts);
+router.get("/", isLoggedIn, getAllProducts);
 
-router.get("/:id", getProductById);
+router.get("/:id", isLoggedIn, getProductById);
 
 router.post(
   "/",
+  isLoggedIn,
   body("title").not().isEmpty().isString().trim().escape(),
   body("description").not().isEmpty().isString().trim().escape(),
   body("code").not().isEmpty().isString().trim().escape(),
@@ -26,6 +28,7 @@ router.post(
 
 router.put(
   "/:id",
+  isLoggedIn,
   body("title").not().isEmpty().isString().trim().escape(),
   body("description").not().isEmpty().isString().trim().escape(),
   body("code").not().isEmpty().isString().trim().escape(),
@@ -35,6 +38,6 @@ router.put(
   updateProductById
 );
 
-router.delete("/:id", deleteProductById);
+router.delete("/:id", isLoggedIn, deleteProductById);
 
 export default router;
